@@ -3,7 +3,7 @@ Breadcrumbs
 
 Breadcrumbs based on custom menu's. Made for WordPress.
 
-**This plugin requires TrendPress**
+**This plugin requires TrendPress.**
 
 ### Usage
 
