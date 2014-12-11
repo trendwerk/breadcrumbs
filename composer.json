@@ -1,0 +1,16 @@
+{
+	"name": "trendwerk/breadcrumbs",
+	"description": "Breadcrumbs based on custom menu's. Made for WordPress.",
+	"type": "wordpress-muplugin",
+	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "Harold Angenent",
+			"email": "harold@trendwerk.nl"
+		}
+	],
+	"require": {
+		"php": ">=5.4",
+		"composer/installers": "v1.0.19"
+    }
+}
