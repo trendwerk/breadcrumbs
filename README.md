@@ -5,6 +5,19 @@ Breadcrumbs based on custom menu's. Made for WordPress.
 
 **This plugin requires TrendPress.**
 
+### Installation
+If you're using Composer to manage WordPress, add this plugin to your project's dependencies. Run:
+```
+composer require trendwerk/breadcrumbs <version>
+```
+
+Or manually add it to your `composer.json`:
+```
+"require": {
+	"trendwerk/breadcrumbs": "<version>"
+},
+```
+
 ### Usage
 
 ```
