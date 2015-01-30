@@ -5,7 +5,7 @@
  * 
  * Plugin URI: https://github.com/trendwerk/breadcrumbs
  * 
- * Author: Ontwerpstudio Trendwerk
+ * Author: Trendwerk
  * Author URI: https://github.com/trendwerk
  * 
  * Version: 1.0.0
