@@ -2,6 +2,13 @@
 /**
  * Plugin Name: Breadcrumbs
  * Description: Breadcrumbs based on custom menu's.
+ * 
+ * Plugin URI: https://github.com/trendwerk/breadcrumbs
+ * 
+ * Author: Ontwerpstudio Trendwerk
+ * Author URI: https://github.com/trendwerk
+ * 
+ * Version: 1.0.0
  *
  * @uses TP_Nav
  */
