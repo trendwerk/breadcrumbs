@@ -26,7 +26,7 @@ function tp_breadcrumbs( $separator = '>', $menu = 'mainnav' ) {
 	$breadcrumbs = apply_filters( 'tp-breadcrumbs', $nav->get_breadcrumb_items() );
 	
 	//Home
-	echo '<a href="'.get_option('siteurl').'">'.__('Home','tp').'</a>';
+	echo '<a href="' . home_url() . '">'.__('Home','tp').'</a>';
 	tp_separator($separator);
 	
 	$i=0;
