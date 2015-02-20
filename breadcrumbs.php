@@ -13,60 +13,79 @@
  * @uses TP_Nav
  */
 
-/**
- * Show the breadcrumbs
- *
- * @param string $separator Separator between breadcrumbs
- * @param string $menu The menu which will be used
- */
-function tp_breadcrumbs( $separator = '>', $menu = 'mainnav' ) {
-	global $post;
-	
-	$nav = new TP_Nav($menu);
-	$breadcrumbs = apply_filters( 'tp-breadcrumbs', $nav->get_breadcrumb_items() );
-	
-	//Home
-	echo '<a href="' . home_url() . '">'.__('Home','tp').'</a>';
-	tp_separator($separator);
-	
-	$i=0;
-	if($breadcrumbs) {
-		foreach($breadcrumbs as $breadcrumb) {
-			if( ! isset( $breadcrumb->is_current ) || !$breadcrumb->is_current) {
-				echo '<a href="'.$breadcrumb->url.'">';
-					echo $breadcrumb->title;
-				echo '</a>';
-			} else {
-				echo '<span class="current">'.$breadcrumb->title.'</span>';
+class TP_Breadcrumbs {
+
+	var $crumbs = array();
+	var $separator;
+	var $menu;
+
+	function __construct( $separator, $menu ) {
+		$this->separator = $separator;
+		$this->menu = $menu;
+
+		$this->init();
+	}
+
+	/**
+	 * Initialize crumbs
+	 */
+	function init() {
+		if( ( $locations = get_nav_menu_locations() ) && isset( $locations[ $this->menu ] ) ) {
+			$this->crumbs[] = '<a href="' . home_url() . '" title="' . __( 'Home', 'tp' ).  '">' . __( 'Home', 'tp' ) . '</a>';
+
+			$this->menu = wp_get_nav_menu_object( $locations[ $this->menu ] );
+			$items = wp_get_nav_menu_items( $this->menu->term_id );
+			_wp_menu_item_classes_by_context( $items );
+
+			$items = apply_filters( 'wp_nav_menu_objects', $items, (object) array() );
+
+			if( 0 === count( $items ) )
+				return;
+
+			foreach( $items as $item ) {
+				if( ! $item->current && ! $item->current_item_parent && ! $item->current_item_ancestor )
+					continue;
+
+				if( $item->url === trailingslashit( home_url() ) )
+					continue;
+				
+				$this->crumbs[] = '<a href="' . $item->url . '" title="' . $item->title.  '">' . $item->title . '</a>';
 			}
-			
-			$i++;
-			if($i < count($breadcrumbs)) {
-				tp_separator($separator);
-			}
+
+			/**
+			 * Singular
+			 */
+			if( is_single() )
+				$this->crumbs[] = '<span class="current-item">' . get_the_title() . '</span>';
+
+			$this->crumbs = apply_filters( 'tp-breadcrumbs', $this->crumbs );
 		}
 	}
-	
-	//Single post or CPT and author pages or taxonomy pages have some
-	if(is_single() && isset( $breadcrumbs[0]->ID ) && !is_single($breadcrumbs[0]->ID)) {
-		tp_separator($separator);
-		echo '<span class="current">'.$post->post_title.'</span>';
-	} else if(is_category()) {
-		tp_separator($separator);
-		$category = get_the_category();
-		echo '<span class="current">'.$category[0]->name.'</span>';
-	} else if(get_query_var('author')) {
-		tp_separator($separator);
-		$author = get_userdata(get_query_var('author'));
-		echo '<span class="current">'.$author->first_name.' '.$author->last_name.'</span>';
+
+	/**
+	 * Display
+	 */
+	function display() {
+		if( 0 < count( $this->crumbs ) )
+			echo implode( $this->separate( $this->separator ), $this->crumbs );
 	}
+
+	/**
+	 * Separator
+	 */
+	function separate( $separator ) {
+		return '<span class="separator">' . $separator . '</span>';
+	}
+
 }
 
 /**
- * Use a separator between breadcrumbs
+ * API
  *
- * @param string $separator
+ * @param string $separator Separator between crumbs
+ * @param string $menu Menu location
  */
-function tp_separator($separator) {
-	echo ' <span class="separator">'.$separator.'</span> ';	
+function tp_breadcrumbs( $separator = '>', $menu = 'mainnav' ) {
+	$breadcrumbs = new TP_Breadcrumbs( $separator, $menu );
+	$breadcrumbs->display();
 }
